@@ -28,7 +28,12 @@ session_start();
 
   <div id="progress"></div>
   <div id="message"></div>
-  <?php $pid = getmypid() ?>
+  
+  <?php 
+	$pid = getmypid() ;
+	$sessionID = session_id();
+	echo 'PID : '.$pid .' - '.' Session :'.$sessionID;
+  ?>
   
   
   <script>
@@ -40,7 +45,7 @@ session_start();
       // Also pass the session id to read the file because the file which storing the progress is placed in a file per session.
       // If the call was success, display the progress bar.
       $.ajax({
-        url: "checker.php?file=<?php echo session_id() ?>",
+        url: "checker.php?file=<?php echo $sessionID ?>",
         success:function(data){
           $("#progress").html('<div class="bar" style="width:' + data.percent + '%"></div>');
           $("#message").html(data.message);
@@ -88,7 +93,7 @@ session_start();
 		  $("#abort").click(function(){
 			
 				$.ajax({
-					url: "kill_process.php?pid=<?php echo $pid?>",
+					url: "kill_process.php?pid=<?php echo $pid?>&file=<?php echo $sessionID ?>",
 					success:function(data){
 						alert('killed');
 					}
